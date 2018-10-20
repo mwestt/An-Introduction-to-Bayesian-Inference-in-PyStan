@@ -12,7 +12,7 @@ np.random.seed(101)
 # Nice plot parameters
 matplotlib.rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 ## for Palatino and other serif fonts use:
-#matplotlib.rc('font',**{'family':'serif','serif':['Palatino']})
+# matplotlib.rc('font',**{'family':'serif','serif':['Palatino']})
 matplotlib.rc('text', usetex=True)
 
 # Workflow parameter
@@ -76,8 +76,8 @@ df = pd.DataFrame(summary_dict['summary'],
 
 alpha_mean, beta_mean = df['mean']['alpha'], df['mean']['beta']
 alpha_median, beta_median = df['50%']['alpha'], df['50%']['beta']
-alpha_min, alpha_max = df['2.5%']['alpha'], df['97.5%']['alpha']
-beta_min, beta_max = df['2.5%']['beta'], df['97.5%']['beta']
+alpha_min, beta_min = df['2.5%']['alpha'], df['2.5%']['beta']
+alpha_max, beta_max = df['97.5%']['alpha'], df['97.5%']['beta']
 
 # Extracting traces
 alpha = fit['alpha']
@@ -85,21 +85,20 @@ beta = fit['beta']
 sigma = fit['sigma']
 lp = fit['lp__']
 
-#alpha_mean, beta_mean, sigma_mean = np.mean(alpha), np.mean(beta), np.mean(sigma)
-#alpha_median, beta_median, sigma_median = np.median(alpha), np.median(beta), np.median(sigma)
+# Plotting regression line
 range_x = max(x) - min(x)
 x_min = min(x) - 0.05 * range_x
 x_max = max(x) + 0.05 * range_x
 x_plot = np.linspace(x_min, x_max, 100)
 
-# np.random.seed(34)
-# np.random.shuffle(alpha), np.random.shuffle(beta)
+# Plot a subset of sampled regression lines
+np.random.shuffle(alpha), np.random.shuffle(beta)
+for i in range(1000):
+  plt.plot(x_plot, alpha[i] + beta[i] * x_plot, color='lightsteelblue', 
+           alpha=0.005 )
 
-for i in range(len(alpha)):
-  plt.plot(x_plot, alpha[i] + beta[i] * x_plot, color='lightsteelblue', alpha=0.005 )
-
+# Plot mean regression line
 plt.plot(x_plot, alpha_mean + beta_mean * x_plot)
-#plt.plot(x_plot, alpha_median + beta_median * x_plot)
 plt.scatter(x, y)
 
 plt.xlim(x_min, x_max)
@@ -122,5 +121,5 @@ def plot_trace(param, param_name='parameter'):
     plt.ylabel('density')
     plt.legend()
 
-plot_trace(alpha, 'alpha') 
+plot_trace(alpha, r'$\alpha$') 
 plt.show()
