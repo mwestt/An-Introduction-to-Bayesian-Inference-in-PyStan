@@ -133,7 +133,7 @@ def plot_trace(param, param_name='parameter'):
     plt.ylabel('density')
     plt.axvline(mean, color='r', lw=2, linestyle='--',label='mean')
     plt.axvline(median, color='c', lw=2, linestyle='--',label='median')
-    plt.axvline(cred_min, linestyle=':', color='k', alpha=0.2, label='95\% CI')
+    plt.axvline(cred_min, linestyle=':', color='k', alpha=0.2, label=r'95\% CI')
     plt.axvline(cred_max, linestyle=':', color='k', alpha=0.2)
     
     plt.gcf().tight_layout()
