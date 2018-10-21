@@ -48,6 +48,11 @@ x = 10 * np.random.rand(100)
 y = alpha + beta * x
 y = np.random.normal(y, scale=sigma)
 plt.scatter(x, y)
+
+plt.xlabel('$x$')
+plt.ylabel('$y$')
+plt.title('Scatter Plot of Data')
+
 plt.show()
 
 # Put our data in a dictionary
@@ -75,9 +80,6 @@ df = pd.DataFrame(summary_dict['summary'],
                   index=summary_dict['summary_rownames'])
 
 alpha_mean, beta_mean = df['mean']['alpha'], df['mean']['beta']
-alpha_median, beta_median = df['50%']['alpha'], df['50%']['beta']
-alpha_min, beta_min = df['2.5%']['alpha'], df['2.5%']['beta']
-alpha_max, beta_max = df['97.5%']['alpha'], df['97.5%']['beta']
 
 # Extracting traces
 alpha = fit['alpha']
@@ -86,9 +88,7 @@ sigma = fit['sigma']
 lp = fit['lp__']
 
 # Plotting regression line
-range_x = max(x) - min(x)
-x_min = min(x) - 0.05 * range_x
-x_max = max(x) + 0.05 * range_x
+x_min, x_max = -0.5, 10.5
 x_plot = np.linspace(x_min, x_max, 100)
 
 # Plot a subset of sampled regression lines
@@ -101,25 +101,49 @@ for i in range(1000):
 plt.plot(x_plot, alpha_mean + beta_mean * x_plot)
 plt.scatter(x, y)
 
+plt.xlabel('$x$')
+plt.ylabel('$y$')
+plt.title('Fitted Regression Line')
 plt.xlim(x_min, x_max)
 plt.show()
 
 def plot_trace(param, param_name='parameter'):
     """Plot the trace and posterior of a parameter."""
+    
+    # Summary statistics
+    mean = np.mean(param)
+    median = np.median(param)
+    cred_min, cred_max = np.percentile(param, 2.5), np.percentile(param, 97.5)
+    
+    # Plotting
     plt.subplot(2,1,1)
     plt.plot(param)
     plt.xlabel('samples')
     plt.ylabel(param_name)
-    plt.axhline(np.mean(param), color='r', lw=2, linestyle='--')
-    plt.axhline(np.median(param), color='c', lw=2, linestyle='--')
+    plt.axhline(mean, color='r', lw=2, linestyle='--')
+    plt.axhline(median, color='c', lw=2, linestyle='--')
+    plt.axhline(cred_min, linestyle=':', color='k', alpha=0.2)
+    plt.axhline(cred_max, linestyle=':', color='k', alpha=0.2)
+    plt.title('Trace and Posterior Distribution for {}'.format(param_name))
+
 
     plt.subplot(2,1,2)
     plt.hist(param, 30, density=True); sns.kdeplot(param, shade=True)
-    plt.axvline(np.mean(param), color='r', lw=2, linestyle='--',label='mean')
-    plt.axvline(np.median(param), color='c', lw=2, linestyle='--',label='median')
     plt.xlabel(param_name)
     plt.ylabel('density')
+    plt.axvline(mean, color='r', lw=2, linestyle='--',label='mean')
+    plt.axvline(median, color='c', lw=2, linestyle='--',label='median')
+    plt.axvline(cred_min, linestyle=':', color='k', alpha=0.2, label='95\% CI')
+    plt.axvline(cred_max, linestyle=':', color='k', alpha=0.2)
+    
+    plt.gcf().tight_layout()
     plt.legend()
 
 plot_trace(alpha, r'$\alpha$') 
+plt.show()
+plot_trace(beta, r'$\beta$') 
+plt.show()
+plot_trace(sigma, r'$\sigma$') 
+plt.show()
+plot_trace(lp, r'lp\_\_') 
 plt.show()
