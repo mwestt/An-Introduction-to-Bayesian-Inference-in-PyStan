@@ -107,6 +107,7 @@ plt.title('Fitted Regression Line')
 plt.xlim(x_min, x_max)
 plt.show()
 
+
 def plot_trace(param, param_name='parameter'):
     """Plot the trace and posterior of a parameter."""
     
@@ -125,7 +126,6 @@ def plot_trace(param, param_name='parameter'):
     plt.axhline(cred_min, linestyle=':', color='k', alpha=0.2)
     plt.axhline(cred_max, linestyle=':', color='k', alpha=0.2)
     plt.title('Trace and Posterior Distribution for {}'.format(param_name))
-
 
     plt.subplot(2,1,2)
     plt.hist(param, 30, density=True); sns.kdeplot(param, shade=True)
