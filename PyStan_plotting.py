@@ -16,7 +16,7 @@ matplotlib.rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 matplotlib.rc('text', usetex=True)
 
 # Workflow parameter
-model_compile = False
+model_compile = True
 
 ## Stan Model ##################################################################
 
@@ -92,10 +92,9 @@ x_min, x_max = -0.5, 10.5
 x_plot = np.linspace(x_min, x_max, 100)
 
 # Plot a subset of sampled regression lines
-np.random.shuffle(alpha), np.random.shuffle(beta)
-for i in range(1000):
+for i in np.random.randint(0, len(alpha), 1000):
   plt.plot(x_plot, alpha[i] + beta[i] * x_plot, color='lightsteelblue', 
-           alpha=0.005 )
+           alpha=0.005)
 
 # Plot mean regression line
 plt.plot(x_plot, alpha_mean + beta_mean * x_plot)
